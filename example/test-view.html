@@ -6,22 +6,25 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <style type="text/css" rel="stylesheet">
         body {
-            background-color:#C3C4B1;
+            background-color:#93B2BF;
         }
         #info { 
             font-size: 24px; 
-            color:#97AB68;
-            text-shadow:#C3C4B1 1px 1px 2px; 
+            color:#184153;
+            text-shadow:#496F80 1px 1px 2px; 
             text-align:right;
             margin:20px 10px;
             text-transform:lowercase;
         }
+        #info a {
+            color: #415660;
+        }
         #body { 
-            border: 1px solid #B9BA89; 
+            border: 1px solid #496D57; 
             overflow-x:hidden; 
             overflow-y:auto; 
-            background-color:#ECECD6; 
-            color: #8A9473; 
+            background-color:#97C8AB; 
+            color: #184153; 
             height: 400px; 
             padding: 10px; 
             font-size:12px; 
@@ -41,29 +44,39 @@
     <script type="text/javascript">
         var lines = 0, 
             notice = $("#info"), 
-            body = $('#body'),
-            ws  = new WebSocket('ws://192.168.1.118:8888');
+            body = $('#body');
+            ws = '';
+        var connect = function() { 
+            ws = new WebSocket('ws://192.168.1.118:8888');
         
-        ws.onopen = function () {
-            notice.html('Connected to:', ws.url);
-        };
-        ws.onmessage = function (msg) {
-            message = JSON.parse(msg.data);
+            ws.onopen = function () {
+                notice.html('Connected to:', ws.url);
+            };
+            ws.onmessage = function (msg) {
+                message = JSON.parse(msg.data);
       
-            if (message.filename) {
-                notice.html( 'watching ' + message.filename );
-            } else if (message.tail) {
-                body.prepend( message.tail.join('<br/>') );
-                body.scrollTop(0);
-                lines = lines + message.tail.length;
-            } else {
-                console.log('Received message:', message);
+                if (message.filename) {
+                    notice.html( 'watching ' + message.filename + ' [<a href="#" onclick="ws.close();">disconnect</a>]' );
+                } else if (message.tail) {
+                    body.prepend( message.tail.join('<br/>') );
+                    body.scrollTop(0);
+                    lines = lines + message.tail.length;
+                } else {
+                    console.log('Received message:', message);
                 
-            } 
-        };
-        ws.onerror = function (e) {
-            notice.html('Had a problem connecting to ' + ws.url);
+                } 
+            };
+        
+            ws.onclose = function (e) {
+                notice.html('Disconnected [<a href="#" onclick="connect();">reconnect</a>]');
+                body.empty();
+            };
+            ws.onerror = function (e) {
+                notice.html('Had a problem connecting to ' + ws.url);
+            };
         }
+
+        connect();
   </script>
 </body>
 </html>
