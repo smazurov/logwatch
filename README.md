@@ -9,28 +9,30 @@ This specific implementation only worries about monitoring a file for changes an
 
 `git clone http://github.com/smazurov/logwatch.git`
 
-only external module it uses is [`ws`](https://github.com/einaros/ws) by Einar Otto Stangvik <einaros@gmail.com>
+only external module it uses is [`ws`](https://github.com/einaros/ws) by Einar Otto Stangvik &lt;einaros@gmail.com&gt;
 
 ### Running ###
 
-`node index.js example/logs/example.log`
+`> node index.js example/logs/example.log`
 
 you can also generate a new log entry by running
 
-`node example/generateLogMessage.js`
+`> node example/generateLogMessage.js`
+
+then you should be able to navigate to `http://localhost:8080/` to see it in action.
 
 ## Caution &amp; Acknowledgments ##
 
 This is a simple example and was created as an entry point into creating nodejs applications
 It lacks advanced functionality while being somewhat "over the top" in structure and abstractions.
 
-Thanks to **Nodejs tail -f log viewer** [gist](https://gist.github.com/867575) by [netroy](https://github.com/netroy) for insparations. 
+Thanks to **Nodejs tail -f log viewer** [gist](https://gist.github.com/867575) by [netroy](https://github.com/netroy) for inspiration. 
 
 ## License ##
 
 (The MIT License)
 
-Copyright (c) 2011 Einar Otto Stangvik &lt;einaros@gmail.com&gt;
+Copyright (c) 2012 Stepan Mazurov &lt;smazurov@gmail.com&gt;
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
