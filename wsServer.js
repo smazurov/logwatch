@@ -1,9 +1,11 @@
 
 var WebSocketServer = require('ws').Server, 
     http = require('http'),
-    fs = require('fs');
+    fs = require('fs'),
+    pool = require('./pool'),
+    filewatch = require('./filewatch');
 
-function start (protocol, filename, filewatch) {
+function start (path) {
     var server = http.createServer(function(request, response) {
         if (request.url == "/") {
             fs.readFile('example/test-view.html', 'utf8', function(err, data) {
@@ -23,18 +25,27 @@ function start (protocol, filename, filewatch) {
         }
     });
     server.listen(8080, function() {
-        filewatch.watch(filename);
+        filewatch.watch(path);
         console.log((new Date()) + ' Server is listening on port 8080');
     });
     
     var wss = new WebSocketServer({port:'8888', host:'0.0.0.0'});
     wss.on('connection', function(connection) {
-    
-        console.log((new Date()) + ' Connection accepted!');
-        filewatch.add(connection, filename);
-        connection.send(JSON.stringify({filename: filename}));
+        pool.add(connection, filewatch);
+        connection.on('message', function(message) {
+            connection.file = 'foo';
+            message = JSON.parse(message);
+            var exists = function(file) {
+                return (message.watch === file);
+            };
+            // console.log(wss);
+            if(filewatch.filelist().some(exists)) {
+                    pool.newFile(message.watch, connection, filewatch);
+            }
+        });
+        //connection.send(JSON.stringify({filename: filename}));
         connection.on('close', function(code, message) {
-            filewatch.remove(connection);
+            pool.remove(connection);
             console.log((new Date()) + ' Peer disconnected.');
         });
     });

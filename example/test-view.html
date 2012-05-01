@@ -54,10 +54,19 @@
             };
             ws.onmessage = function (msg) {
                 message = JSON.parse(msg.data);
-      
-                if (message.filename) {
-                    notice.html( 'watching ' + message.filename + ' [<a href="#" onclick="ws.close();">disconnect</a>]' );
-                } else if (message.tail) {
+                
+                console.log('Received message:', message);
+                if (message.filenames) {
+                    var html = 'watching ' + message.file;
+                    for (var i=0; i < message.filenames.length; i++) {
+                        if (message.filenames[i] !== message.file) {
+                            html += "<br />watch <a href=\"#\" onclick=\"watchFile('" + message.filenames[i] + "');\">" + message.filenames[i] + "</a>";    
+                        }
+                    };
+                    html += "<br />[<a href=\"#\" onclick=\"ws.close();\">disconnect</a>]";
+                    notice.html(html);
+                }
+                if (message.tail) {
                     body.prepend( message.tail.join('<br/>') );
                     body.scrollTop(0);
                     lines = lines + message.tail.length;
@@ -74,8 +83,13 @@
             ws.onerror = function (e) {
                 notice.html('Had a problem connecting to ' + ws.url);
             };
+            
         }
-
+        
+        function watchFile(file) {
+            body.empty();
+            ws.send(JSON.stringify({watch:file}));
+        }
         connect();
   </script>
 </body>

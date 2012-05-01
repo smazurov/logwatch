@@ -1,8 +1,7 @@
 #!/usr/bin/env node
-var filename = process.argv[2];
-if (!filename) return util.puts("Usage: node <index.js> <filename>");
+var path = process.argv[2];
+if (!path) return util.puts("Usage: node <index.js> <filename>");
 
-var filewatch = require('./filewatch'),
-    wsServer = require('./wsServer');
+var wsServer = require('./wsServer');
 
-wsServer.start('log', filename, filewatch);
+wsServer.start(path);
