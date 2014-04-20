@@ -1,17 +1,19 @@
-# logwatch, a simple websocket based real-time log viewer #
+logwatch
+========
+
 `logwatch` is my first node.js app, written with the idea of seeing application debug log in an admin interface.
 
 This specific implementation only worries about monitoring a file for changes and displaying results to a generic html front-end.
 
-## Usage ##
+## Usage 
 
-### Installing ###
+### Installing 
 
 `git clone http://github.com/smazurov/logwatch.git`
 
 only external module it uses is [`ws`](https://github.com/einaros/ws) by Einar Otto Stangvik &lt;einaros@gmail.com&gt;
 
-### Running ###
+### Running 
 
 `> node index.js example/logs/example.log`
 
@@ -21,14 +23,14 @@ you can also generate a new log entry by running
 
 then you should be able to navigate to `http://localhost:8080/` to see it in action.
 
-## Caution &amp; Acknowledgments ##
+## Caution &amp; Acknowledgments
 
 This is a simple example and was created as an entry point into creating nodejs applications
 It lacks advanced functionality while being somewhat "over the top" in structure and abstractions.
 
 Thanks to **Nodejs tail -f log viewer** [gist](https://gist.github.com/867575) by [netroy](https://github.com/netroy) for inspiration. 
 
-## License ##
+## License
 
 (The MIT License)
 
